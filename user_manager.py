@@ -83,6 +83,47 @@ def register_user():
             
         break
    
-    # Зберігаємо всі валідні дані
+
     save_user(username, password, first_name, last_name, dob)
     print(f"\nВітаємо, {first_name} {last_name}! Ви успішно зареєструвалися.")
+
+def login_user():
+   
+    print("\n=== Вхід у систему ===")
+    
+    users = load_users()
+    
+    if not users:
+        register_user()
+        return None
+
+    while True:
+        username = input("Введіть логін або '0' для відміни: ").strip()
+        
+        if username == '0':
+            return None
+            
+        # Якщо логін не знайдено в базі
+        if username not in users:
+            print("\n Користувача з таким логіном не знайдено.")
+            redirect = input("Бажаєте зареєструватися прямо зараз (y/n)? ").strip().lower()
+            
+            if redirect == 'y':
+                register_user()
+                return None 
+            else:
+                continue 
+                
+        
+        while True:
+            password = input("Введіть пароль (або '0' для відміни): ").strip()
+            
+            if password == '0':
+                return None
+                
+            if users[username]["password"] == password:
+                first_name = users[username].get("first_name", username)
+                print(f"\nУспішний вхід! З поверненням, {first_name}!")
+                return username 
+            else:
+                print(" Невірний пароль. Спробуйте ще раз.")
