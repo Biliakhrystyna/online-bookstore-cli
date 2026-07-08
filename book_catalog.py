@@ -80,4 +80,53 @@ def display_and_buy_books():
                 
         else:
             print("\nБудь ласка, введіть коректне число.")
+
+def search_books():
+    
+    books = load_books()
+    if not books:
+        print("\nНаразі магазин порожній.")
+        return
+
+    query = input("\nВведіть назву книги (або '0' для виходу): ").strip().lower()
+    
+    if query == '0':
+        return
+
+    print(f"\n Результати пошуку за запитом '{query}':")
+    
+    found_books = []
+    # Проходимо по всіх книгах
+    for i, b in enumerate(books, 1):
+        # Перевіряємо, чи міститься введений запит у назві книги (перевівши назву в нижній регістр)
+        if query in b['title'].lower():
+            found_books.append((i, b))
             
+    if not found_books:
+        print(" На жаль, книг з такою назвою не знайдено.")
+    else:
+        for i, b in found_books:
+            status = f"{b['stock']} шт." if b['stock'] > 0 else "Немає в наявності"
+            print(f"{i}. {b['author']} - {b['title']} ({b['genre']}) | {b['price']} грн | Залишок: {status}")
+            buy_choice = input("\nБажаєте придбати одну зі знайдених книг (y/n)? ").strip().lower()
+        
+        if buy_choice == 'y':
+            book_num_str = input("Введіть номер книги, яку хочете придбати: ")
+            
+            if book_num_str.isdigit():
+                idx = int(book_num_str) - 1
+                
+                # Перевіряємо, чи належить введений номер до списку знайдених книг
+                valid_indices = [item[0] - 1 for item in found_books]
+                
+                if idx in valid_indices:
+                    if books[idx]['stock'] > 0:
+                        books[idx]['stock'] -= 1
+                        save_books(books)
+                        print(f"\nВи успішно придбали книгу '{books[idx]['title']}'!")
+                    else:
+                        print(f"\n На жаль, книга '{books[idx]['title']}' закінчилася.")
+                else:
+                    print("\n Книги з таким номером немає у результатах пошуку.")
+            else:
+                print("\n Будь ласка, введіть коректне число.")

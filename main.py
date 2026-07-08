@@ -1,4 +1,4 @@
-from book_catalog import display_and_buy_books
+from book_catalog import display_and_buy_books, search_books
 def display_menu():
     while True:
         print("\n=== Інтернет-книгарня ===")
@@ -14,7 +14,7 @@ def display_menu():
         if choice == '1':
            display_and_buy_books()
         elif choice == '2':
-            print("\n[В розробці] Модуль пошуку...")
+           search_books()
         elif choice == '3':
             print("\n[В розробці] Модуль входу в систему...")
         elif choice == '4':
