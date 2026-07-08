@@ -1,3 +1,5 @@
+from book_catalog import display_and_buy_books, search_books
+from user_manager import register_user
 def display_menu():
     while True:
         print("\n=== Інтернет-книгарня ===")
@@ -11,13 +13,13 @@ def display_menu():
         choice = input("\nОберіть дію (введіть цифру 0-5): ")
         
         if choice == '1':
-            print("\n[В розробці] Вивід списку доступних книг...")
+           display_and_buy_books()
         elif choice == '2':
-            print("\n[В розробці] Модуль пошуку...")
+           search_books()
         elif choice == '3':
             print("\n[В розробці] Модуль входу в систему...")
         elif choice == '4':
-            print("\n[В розробці] Модуль реєстрації користувача...")
+            register_user()
         elif choice == '5':
             print("\n[В розробці] Ваша історія покупок...")
         elif choice == '0':
