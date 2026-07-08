@@ -1,3 +1,4 @@
+import sys
 from book_catalog import display_and_buy_books, search_books
 from user_manager import register_user, load_users
 from github_skill import get_repo_structure, get_file_content
@@ -60,10 +61,27 @@ def display_menu():
         elif choice == '7':
             view_any_github_file()
         elif choice == '0':
-            print("\nДякуємо, що завітали! До побачення 👋")
+            print("\nДякуємо, що завітали! До побачення ")
             break
         else:
-            print("\n❌ Невірна команда. Будь ласка, введіть цифру від 0 до 7.")
+            print("\n Невірна команда. Будь ласка, введіть цифру від 0 до 7.")
 
 if __name__ == "__main__":
-    display_menu()
+    if len(sys.argv) > 1:
+        repo_identifier = sys.argv[1]
+        
+        if "/" in repo_identifier:
+            owner, repo = repo_identifier.split("/")
+            print(f" Отримання структури для: {owner}/{repo}")
+            
+            # Використовуємо твій скіл безпосередньо
+            files = get_repo_structure(owner, repo)
+            if files:
+                for item in files:
+                    print(f"[{item['type'].upper()}]: {item['path']}")
+            else:
+                print("Не вдалося отримати структуру.")
+        else:
+            print("Помилка: аргумент має бути у форматі 'власник/репозиторій'")
+    else:
+        display_menu()
