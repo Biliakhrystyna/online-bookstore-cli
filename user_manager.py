@@ -1,5 +1,4 @@
 import os
-from datetime import datetime
 
 USERS_FILE = "users.txt"
 
@@ -99,8 +98,10 @@ def login_user():
         return None
 
     while True:
-        username = input("Введіть логін ").strip()
+        username = input("Введіть логін або '0' для відміни: ").strip()
         
+        if username == '0':
+            return None
             
         # Якщо логін не знайдено в базі
         if username not in users:
@@ -126,33 +127,3 @@ def login_user():
                 return username 
             else:
                 print(" Невірний пароль. Спробуйте ще раз.")
-
-HISTORY_FILE = "history.txt"
-
-def record_purchase(username, book_title, price):
-    """Записує факт покупки у файл історії."""
-    # Отримуємо поточну дату та час
-    date_str = datetime.now().strftime("%d.%m.%Y %H:%M")
-    
-    with open(HISTORY_FILE, "a", encoding="utf-8") as f:
-        f.write(f"{username}|{book_title}|{price}|{date_str}\n")
-
-def view_purchase_history(username):
-   
-    print(f"\n=== Історія покупок ({username}) ===")
-    
-    if not os.path.exists(HISTORY_FILE):
-        print(" Ваша історія покупок порожня.")
-        return
-
-    found = False
-    with open(HISTORY_FILE, "r", encoding="utf-8") as f:
-        for line in f:
-            parts = line.strip().split("|")
-            # Перевіряємо, чи є 4 елементи і чи збігається логін
-            if len(parts) == 4 and parts[0] == username:
-                print(f"- {parts[1]} ({parts[2]} грн) | Куплено: {parts[3]}")
-                found = True
-
-    if not found:
-        print("Ваша історія покупок порожня.")

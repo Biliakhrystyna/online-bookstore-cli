@@ -1,5 +1,5 @@
 import os
-from user_manager import record_purchase
+
 BOOKS_FILE = "books.txt"
 
 
@@ -30,7 +30,7 @@ def save_books(books):
             f.write(f"{b['author']}|{b['title']}|{b['genre']}|{b['price']}|{b['stock']}\n")
 
 
-def display_and_buy_books(current_user=None):
+def display_and_buy_books():
     """Виводить список книг і обробляє логіку покупки."""
     
     
@@ -64,8 +64,7 @@ def display_and_buy_books(current_user=None):
                     books[idx]['stock'] -= 1
                     save_books(books)
                     print(f"\nВи успішно придбали книгу '{books[idx]['title']}'!")
-                    if current_user:
-                        record_purchase(current_user, books[idx]['title'], books[idx]['price'])
+                    
                     # Запитуємо, чи хоче користувач продовжити покупки
                     continue_buying = input("Бажаєте придбати ще книги (y/n)? ").strip().lower()
                     if continue_buying != 'y':
@@ -82,7 +81,7 @@ def display_and_buy_books(current_user=None):
         else:
             print("\nБудь ласка, введіть коректне число.")
 
-def search_books(current_user=None):
+def search_books():
     
     books = load_books()
     if not books:
@@ -125,8 +124,6 @@ def search_books(current_user=None):
                         books[idx]['stock'] -= 1
                         save_books(books)
                         print(f"\nВи успішно придбали книгу '{books[idx]['title']}'!")
-                        if current_user:
-                         record_purchase(current_user, books[idx]['title'], books[idx]['price'])
                     else:
                         print(f"\n На жаль, книга '{books[idx]['title']}' закінчилася.")
                 else:
