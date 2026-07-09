@@ -74,7 +74,7 @@ if __name__ == "__main__":
             owner, repo = repo_identifier.split("/")
             print(f" Отримання структури для: {owner}/{repo}")
             
-            # Використовуємо твій скіл безпосередньо
+            
             files = get_repo_structure(owner, repo)
             if files:
                 for item in files:
