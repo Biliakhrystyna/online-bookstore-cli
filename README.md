@@ -1,6 +1,8 @@
 ﻿# Інтернет-книгарня CLI
 ## Тестування
-1. Клонувати репозиторій
-2. Створити`.env` файл `GITHUB_TOKEN=your_token`.
-3. Встановити залежнсті: `pip install requests python-dotenv`.
-4. Запустити: `python main.py Owner/RepoName`
+- Клонувати репозиторій: `git clone https://github.com/Biliakhrystyna/online-bookstore-cli.git`
+- Створити `.env` файл та додати туди ключі: 
+  `GITHUB_TOKEN=your_github_token`
+  `GEMINI_API_KEY=your_gemini_key`
+- Встановити залежності: `pip install requests python-dotenv`
+- Запустити аналіз: `python analyzer.py` 
