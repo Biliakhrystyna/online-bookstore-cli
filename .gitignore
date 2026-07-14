@@ -1,3 +1,6 @@
 users.txt
 .env
 history.txt
+__pycache__/
+*.py[cod]
+*$py.class

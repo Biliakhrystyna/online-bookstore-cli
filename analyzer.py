@@ -43,10 +43,14 @@ def run_full_analysis(owner, repo, branch="main"):
     gemini_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={gemini_key}"
     
     prompt = (
-        "Analyze the following repository structure and return a JSON object with keys: "
-        "'primary_language', 'potential_issues' (list), 'solutions' (list), 'comments' (string). "
-        "Return ONLY pure JSON code without any markdown block formatting.\n\n"
-        f"Repository files:\n{repo_structure_text}"
+       "Проаналізуй наведену структуру файлів репозиторію. "
+        "Поверни результат у форматі JSON з такими ключами: "
+        "'structure_description' (рядок: короткий опис структури проєкту), "
+        "'main_technologies' (список: визначення основних технологій), "
+        "'strengths' (список: сильні сторони архітектури/проєкту), "
+        "'potential_issues' (список: можливі проблеми), "
+        "'recommendations' (список: рекомендації щодо покращення). "
+        f"Файли репозиторію:\n{repo_structure_text}"
     )
     
     payload = {
@@ -63,10 +67,30 @@ def run_full_analysis(owner, repo, branch="main"):
 
     try:
         raw_response = gemini_res.json()["candidates"][0]["content"]["parts"][0]["text"]
-        analysis_data = json.loads(raw_response)
+        
+        # Очищення тексту від можливих маркдаун-блоків
+        cleaned_response = raw_response.strip()
+        if cleaned_response.startswith("```json"):
+            cleaned_response = cleaned_response[7:]
+        if cleaned_response.startswith("```"):
+            cleaned_response = cleaned_response[3:]
+        if cleaned_response.endswith("```"):
+            cleaned_response = cleaned_response[:-3]
+            
+        cleaned_response = cleaned_response.strip()
+        
+        # Знаходимо перший '{' та останній '}', щоб відкинути зайві дужки або текст
+        start_idx = cleaned_response.find('{')
+        end_idx = cleaned_response.rfind('}') + 1
+        
+        if start_idx != -1 and end_idx != 0:
+            cleaned_response = cleaned_response[start_idx:end_idx]
+
+        analysis_data = json.loads(cleaned_response)
+        
     except Exception as e:
-        print(f"Не вдалося розпарсити відповідь від AI: {e}")
-        print(f"Сира відповідь сервера: {gemini_res.text}")
+        print(f" Не вдалося розпарсити відповідь від AI: {e}")
+        print(f"Сира відповідь сервера:\n{gemini_res.text}")
         return
 
     # 3. Збереження результатів у директорію /output
